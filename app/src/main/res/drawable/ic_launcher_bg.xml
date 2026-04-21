@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Adaptive icon background: vibrant linear gradient from cyan to deep indigo.
+    Fills the full 108dp x 108dp adaptive-icon area so every mask (circle,
+    squircle, rounded-square, teardrop) shows the gradient edge-to-edge.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Base diagonal gradient -->
+    <path android:pathData="M0,0 L108,0 L108,108 L0,108 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="0"
+                android:startY="0"
+                android:endX="108"
+                android:endY="108"
+                android:startColor="#00B8D4"
+                android:endColor="#3D5AFE" />
+        </aapt:attr>
+    </path>
+
+    <!-- Soft radial highlight in the upper-left for subtle depth -->
+    <path android:pathData="M0,0 L108,0 L108,108 L0,108 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="30"
+                android:centerY="28"
+                android:gradientRadius="70"
+                android:startColor="#40FFFFFF"
+                android:endColor="#00FFFFFF" />
+        </aapt:attr>
+    </path>
+
+</vector>

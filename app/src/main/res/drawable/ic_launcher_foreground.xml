@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Adaptive icon foreground: stylized filament spool.
+    - Viewport: 108 x 108
+    - Content lives within the 66dp safe zone (circle of radius 33 centered at
+      (54, 54)) so it's always visible regardless of the device's icon mask.
+    - Warm orange coil against the cool cyan/indigo background background
+      creates strong visual contrast that reads well at all home-screen sizes.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Soft drop shadow beneath spool -->
+    <path
+        android:pathData="M54,83 A24,3 0 1,0 54,89 A24,3 0 1,0 54,83 Z"
+        android:fillColor="#55000000" />
+
+    <!-- Outer flange (front disc) — white with a subtle gradient for depth -->
+    <path android:pathData="M54,26 A28,28 0 1,0 54,82 A28,28 0 1,0 54,26 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="36"
+                android:startY="30"
+                android:endX="72"
+                android:endY="80"
+                android:startColor="#FFFFFFFF"
+                android:endColor="#FFB0BEC5" />
+        </aapt:attr>
+    </path>
+
+    <!-- Filament coil — annulus, warm orange gradient for vibrant contrast -->
+    <path
+        android:pathData="M54,32 A22,22 0 1,0 54,76 A22,22 0 1,0 54,32 Z M54,46 A8,8 0 1,1 54,62 A8,8 0 1,1 54,46 Z"
+        android:fillType="evenOdd">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="36"
+                android:startY="36"
+                android:endX="72"
+                android:endY="72"
+                android:startColor="#FFB74D"
+                android:endColor="#E65100" />
+        </aapt:attr>
+    </path>
+
+    <!-- Winding lines on the coil — suggest wrapped filament -->
+    <path
+        android:pathData="M54,36 A18,18 0 1,1 54,72"
+        android:strokeColor="#33FFFFFF"
+        android:strokeWidth="0.8"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M54,40 A14,14 0 1,1 54,68"
+        android:strokeColor="#33FFFFFF"
+        android:strokeWidth="0.8"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round" />
+
+    <!-- Inner core hole — dark, crisp -->
+    <path
+        android:pathData="M54,46 A8,8 0 1,0 54,62 A8,8 0 1,0 54,46 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="46"
+                android:startY="46"
+                android:endX="62"
+                android:endY="62"
+                android:startColor="#FF263238"
+                android:endColor="#FF0D1417" />
+        </aapt:attr>
+    </path>
+
+    <!-- Specular highlight on the upper-left flange — adds polish and depth -->
+    <path
+        android:pathData="M34,44 A24,24 0 0,1 54,28"
+        android:strokeColor="#B3FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+</vector>
