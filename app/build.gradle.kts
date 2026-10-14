@@ -9,6 +9,9 @@ plugins {
 }
 
 android {
+    // Lint runs in CI (I-FW-005). Issues that existed when CI was added are recorded in the baseline;
+    // only NEW lint errors fail the build. Shrink the baseline as those are fixed.
+    lint { baseline = file("lint-baseline.xml") }
     namespace = "com.filamentvault"
     compileSdk = 35
 
