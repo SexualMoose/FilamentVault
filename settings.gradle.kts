@@ -17,7 +17,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://jitpack.io") }
+        // No jitpack.io (AUD-009): nothing resolves from it. colorpicker-compose
+        // (com.github.skydoves) is published to Maven Central.
     }
 }
 
