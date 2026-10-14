@@ -48,7 +48,7 @@ Working; dormant since June 2026. Evidence:
 - Accounts / keys: none to build a debug APK or run the app. Release signing uses a key kept outside the
   repository; no `signingConfigs` block is committed (see Build & Run).
 - Network is needed only at build time: Google Maven, Maven Central and the Gradle Plugin Portal for
-  plugins; Google Maven, Maven Central and JitPack for libraries; `services.gradle.org` for the Gradle
+  plugins; Google Maven and Maven Central for libraries; `services.gradle.org` for the Gradle
   wrapper distribution.
 
 ## Dependencies
@@ -67,7 +67,7 @@ All versions are declared in `gradle/libs.versions.toml`.
 | Coil 3 (`io.coil-kt.coil3:coil-compose`) | 3.0.4 | Apache-2.0 |
 | kotlinx-coroutines-android | 1.9.0 | Apache-2.0 |
 | kotlinx-serialization-json | 1.7.3 | Apache-2.0 |
-| skydoves colorpicker-compose (`com.github.skydoves:colorpicker-compose`, via JitPack) | 1.1.2 | Apache-2.0 |
+| skydoves colorpicker-compose (`com.github.skydoves:colorpicker-compose`, from Maven Central) | 1.1.2 | Apache-2.0 |
 | AndroidX DataStore Preferences | 1.1.1 | Apache-2.0 |
 | AndroidX ExifInterface | 1.3.7 | Apache-2.0 |
 | Build plugins: AGP, Kotlin Android/Compose/Serialization, KSP | see versions above | Apache-2.0 |
@@ -84,7 +84,7 @@ No copyleft (GPL/LGPL/MPL/AGPL) or non-commercial dependencies are present.
    open): `sdk.dir=<path to your Android SDK>`. The file is git-ignored. Alternatively, export `ANDROID_HOME`
    pointing to the SDK. Without one of the two, terminal builds fail with "SDK location not found".
 4. Open the project in Android Studio and let Gradle sync. Plugins resolve from Google Maven, Maven Central
-   and the Gradle Plugin Portal; libraries from Google Maven, Maven Central and JitPack (all configured in
+   and the Gradle Plugin Portal; libraries from Google Maven and Maven Central (all configured in
    `settings.gradle.kts`); the wrapper downloads Gradle 8.11.1 from `services.gradle.org`.
 5. To build from a terminal, make the wrapper executable first. `gradlew` is committed without the executable
    bit, so `./gradlew` fails with "permission denied" on a fresh clone:
