@@ -2,7 +2,8 @@
 
 A fully offline Android app for cataloging 3D-printing filament spools and per-material print-setting profiles.
 
-_Last audited: 2026-10-11 against main @ 6b3a8ee._
+_Last audited: 2026-10-11 against main @ 6b3a8ee; updated 2026-10-19 for **2.1.3 (versionCode 4)**, FleetReporter
+(branch `fleet-reporter`)._
 
 ## Overview / Purpose
 FilamentVault is a local-first inventory manager for 3D-printer filament spools. Each entry records the
@@ -22,8 +23,9 @@ All data lives in a local Room (SQLite) database, app-internal image files, and 
 JSON backup file.
 
 ## Status
-Working; dormant since June 2026. Evidence:
-- `versionName = "2.1.2"`, `versionCode = 3`, `applicationId = "com.filamentvault"` in `app/build.gradle.kts`.
+Working. 2.1.3 (versionCode 4, 2026-10-19) adds FleetReporter crash, freeze and error reports; before that, no
+code changes since June 2026. Evidence:
+- `versionName = "2.1.3"`, `versionCode = 4`, `applicationId = "com.filamentvault"` in `app/build.gradle.kts`.
 - Git history has 3 commits: `19a15fd` (2026-04-21, "Initial release v2.1.1"), `f9ccabd` (2026-06-25, bumps
   to 2.1.2 / vc3; the message also mentions moving to a different release signing key, but the diff only
   changes the version — no signing configuration is in the repo), and `6b3a8ee` (2026-06-27, docs). No code
@@ -171,14 +173,32 @@ Clean-architecture / MVVM, Hilt-injected, single-Activity Compose app (package `
   (`PickVisualMedia`) for gallery images; the system camera app via `ActivityResultContracts.TakePicture`
   (no CameraX); and a non-exported `FileProvider` (`${applicationId}.fileprovider`) that hands the camera a
   cache file URI.
-- **Other repos and services:** the app has no client for any external server or device-management service,
-  and nothing in this repo depends on one. A separate iOS port lives in the public FilamentVault-iOS repo; the
+- **FleetGuardian (same phone):** `fleet/FleetReporter.kt` sends crash, freeze, error and warning reports to
+  FleetGuardian's health provider (`content://com.sexualmoose.fleetguardian.health`, `report_issue`; no
+  network). See Crash and error reports (FleetReporter) below.
+- **Other repos and services:** apart from those reports, the app has no client for any external server or
+  device-management service, and nothing in this repo depends on one. A separate iOS port lives in the public FilamentVault-iOS repo; the
   two share no code and do not sync data. The iOS repo bundles a byte-identical copy of `defaults.json`
   (checked 2026-10-11), so catalog changes must be mirrored there. Backup files cannot be imported across
   platforms: Android writes timestamps as epoch milliseconds and iOS writes ISO-8601 date strings.
 - **Reference data only:** `assets/defaults.json` names real filament manufacturers (about 47, e.g. Bambu Lab,
   Prusament, Polymaker, eSUN, Hatchbox, Overture) as brand/profile data — no API, integration, or affiliation
   with any of them.
+
+## Crash and error reports (FleetReporter)
+- **File:** `app/src/main/java/com/filamentvault/fleet/FleetReporter.kt` (a copy of FleetGuardian's
+  `docs/fleet-reporter/FleetReporter.kt`), installed in `FilamentVaultApp.onCreate()` right after
+  `super.onCreate()`. The manifest's `<queries>` entry lets the app see FleetGuardian's provider.
+- **What it reports:** crashes, freezes (ANR: main thread blocked over 5 s) and errors/warnings the app logs on
+  purpose (`FleetReporter.error()` / `warn()`; the app has no call sites yet) to FleetGuardian on the same
+  phone, over its content provider: no network and no new permission.
+- **Where they go:** FleetGuardian forwards them to the Jarvis server's Reports, and a fatal one (crash, ANR,
+  crash loop, failing to start) can start an automatic fix.
+- **Privacy:** text is redacted (emails, tokens, secrets such as `password=` values, long hex/base64 runs) before
+  it leaves the app. No photos, files or device ids are sent.
+- **Without FleetGuardian 0.3.0+ on the phone:** reports wait in a queue of at most 50
+  (`filesDir/fleetreporter/queue`) and are resent at the next start; nothing else changes.
+- Spec: FleetGuardian `docs/fleet-reporter/README.md` (dev hub contract section 6).
 
 ## Configuration & Secrets
 - No secrets are needed to build a debug APK or run the app. The code reads no environment variables,
@@ -198,7 +218,7 @@ The exported Room schemas under `app/schemas/` would allow Room migration tests,
 - No CI workflows (`.github/` does not exist).
 - `minSdk = 35` (Android 15) excludes most devices; it reflects a personal target rather than a
   public-distribution choice.
-- The Settings → About text is hard-coded as "FilamentVault v2.1.1" while the build is `versionName` 2.1.2.
+- The Settings → About text is hard-coded as "FilamentVault v2.1.1" while the build is `versionName` 2.1.3.
 - Backups do not include photos: the export omits the cropped thumbnail path and stores only an app-internal
   path for the original photo, so restored entries come back without a thumbnail (and photos never transfer to
   another device).
@@ -239,7 +259,8 @@ The exported Room schemas under `app/schemas/` would allow Room migration tests,
 ## Security notes
 - **Trust boundaries:** the app is offline. Data stays in the app sandbox (Room database, internal image
   files, DataStore) except when the user explicitly exports a backup, which is plain, unencrypted JSON written
-  wherever the user chooses. Imported backup files are untrusted input parsed with kotlinx-serialization.
+  wherever the user chooses, and for redacted crash, freeze and error reports, which go to FleetGuardian on the
+  same phone and on to the Jarvis server. Imported backup files are untrusted input parsed with kotlinx-serialization.
   There is no WebView, JavaScript bridge, or dynamic code loading, and the only raw SQL is constant
   schema-migration DDL.
 - **Auth model:** none — no accounts, logins, or tokens.

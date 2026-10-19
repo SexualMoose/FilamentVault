@@ -3,7 +3,8 @@
 A fully offline Android app for cataloging 3D-printing filament spools and per-material print-setting
 profiles.
 
-**Status:** working, v2.1.2 (versionCode 3); no code changes since June 2026.
+**Status:** working, v2.1.3 (versionCode 4), which adds FleetReporter crash, freeze and error reports; no other
+code changes since June 2026.
 
 ## Features
 - Spool inventory with material, color (hex, HSV picker, or pick from photo), brand, modifier, diameter,
@@ -12,7 +13,17 @@ profiles.
   import) that auto-fill new spools; edit, override, or add your own.
 - Color-wheel-sorted inventory with filters (material, modifier, brand, temperatures, diameter).
 - JSON backup/restore to any location you choose (merge or replace); light/dark/system theme.
-- No account, no network, no `INTERNET` permission — everything stays on the device.
+- No account, no network, no `INTERNET` permission — everything stays on the device (crash and error reports
+  go to FleetGuardian; see below).
+
+## Crash and error reports (FleetReporter)
+`app/src/main/java/com/filamentvault/fleet/FleetReporter.kt`, installed in `FilamentVaultApp.onCreate()`, reports
+crashes, freezes (ANR: main thread blocked over 5 s) and errors/warnings the app logs on purpose
+(`FleetReporter.error()` / `warn()`; no call sites yet) to FleetGuardian on the same phone, through its content
+provider (no network, no new permission). FleetGuardian forwards them to the Jarvis server's Reports, and a fatal
+one can start an automatic fix. Text is redacted (emails, tokens, secrets) before it leaves the app. With no
+FleetGuardian 0.3.0+ on the phone, reports wait in a queue of at most 50 (`filesDir/fleetreporter/queue`) and
+nothing else changes. Spec: FleetGuardian `docs/fleet-reporter/README.md`.
 
 ## Quickstart
 Requires JDK 17 to 23 (JDK 21 recommended, e.g. Android Studio's bundled JBR; the Gradle 8.11.1 wrapper fails

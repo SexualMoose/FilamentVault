@@ -3,6 +3,12 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- Package visibility for FleetGuardian's health provider: crash / freeze / error reports
+         (dev hub contract section 6, FleetReporter.kt). -->
+    <queries>
+        <provider android:authorities="com.sexualmoose.fleetguardian.health" />
+    </queries>
+
     <application
         android:name=".FilamentVaultApp"
         android:allowBackup="true"
