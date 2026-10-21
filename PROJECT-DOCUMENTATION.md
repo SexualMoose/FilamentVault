@@ -186,6 +186,9 @@ Clean-architecture / MVVM, Hilt-injected, single-Activity Compose app (package `
   with any of them.
 
 ## Crash and error reports (FleetReporter)
+
+**FleetReporter 1.1** (2.1.4, versionCode 5, 2026-10-20): The freeze watchdog runs only while the app is on screen; on Android 11+ the freezes and native crashes it misses arrive from Android's exit records at the next start; reports go only to FleetGuardian signed with the fleet release key; UUIDs and MAC addresses are redacted; and each queued report is sent by exactly one process. Details: FleetGuardian `docs/fleet-reporter/README.md`.
+
 - **File:** `app/src/main/java/com/filamentvault/fleet/FleetReporter.kt` (a copy of FleetGuardian's
   `docs/fleet-reporter/FleetReporter.kt`), installed in `FilamentVaultApp.onCreate()` right after
   `super.onCreate()`. The manifest's `<queries>` entry lets the app see FleetGuardian's provider.
